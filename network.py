@@ -1,4 +1,3 @@
-import numpy as np
 import pickle
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
@@ -12,7 +11,7 @@ class Network:
         last_cost - wartosc funkcji kosztu w poprzedniej chwili czasu
         result - tablica przechowująca wyjścia sieci dla danej epoki
     '''
-    def __init__(self, training_params, training_labels, layer_num, neurons_in_layers, epoch_num, learning_rate,
+    def __init__(self, training_params, training_labels, layers, epoch_num, learning_rate,
                  test_params, test_labels, lr_inc=1.05, lr_desc=0.7, er=1.04):
         '''
         Inicializacja wag i biasów Nguyen-Widrow'a
@@ -22,33 +21,33 @@ class Network:
         :param weights:
         :param biases:
         '''
+        self.num_layers = len(layers)
+        self.layers = layers
         weights = []
         bias = []
-        w_fix = 0.7 * (neurons_in_layers[0] ** (1 / 15))
-        w_rand = (np.random.rand(neurons_in_layers[0], 15) * 2 - 1)
-        w_rand = np.sqrt(1. / np.square(w_rand).sum(axis=1).reshape(neurons_in_layers[0], 1)) * w_rand
+        w_fix = 0.7 * (self.layers[0] ** (1 / 15))
+        w_rand = (np.random.rand(self.layers[0], 15) * 2 - 1)
+        w_rand = np.sqrt(1. / np.square(w_rand).sum(axis=1).reshape(self.layers[0], 1)) * w_rand
         w = w_fix * w_rand
-        b = np.array([0]) if neurons_in_layers[0] == 1 \
-            else w_fix * np.linspace(-1, 1, neurons_in_layers[0]) * np.sign(w[:, 0])
+        b = np.array([0]) if self.layers[0] == 1 \
+            else w_fix * np.linspace(-1, 1, self.layers[0]) * np.sign(w[:, 0])
 
         weights.append(w)
         bias.append(b)
-        for i in range(1, layer_num):
-            w_fix = 0.7 * (neurons_in_layers[i] ** (1 / neurons_in_layers[i - 1]))
-            w_rand = (np.random.rand(neurons_in_layers[i], neurons_in_layers[i - 1]) * 2 - 1)
-            w_rand = np.sqrt(1. / np.square(w_rand).sum(axis=1).reshape(neurons_in_layers[i], 1)) * w_rand
+        for i in range(1, self.num_layers):
+            w_fix = 0.7 * (self.layers[i] ** (1 / self.layers[i - 1]))
+            w_rand = (np.random.rand(self.layers[i], self.layers[i - 1]) * 2 - 1)
+            w_rand = np.sqrt(1. / np.square(w_rand).sum(axis=1).reshape(self.layers[i], 1)) * w_rand
             w = w_fix * w_rand
-            b = np.array([0]) if neurons_in_layers[i] == 1 \
-                else w_fix * np.linspace(-1, 1, neurons_in_layers[i]) * np.sign(w[:, 0])
+            b = np.array([0]) if self.layers[i] == 1 \
+                else w_fix * np.linspace(-1, 1, self.layers[i]) * np.sign(w[:, 0])
             weights.append(w)
             bias.append(b)
 
         # dla ostatniej warstwy
-        weights.append(np.random.rand(neurons_in_layers[-1]))
+        weights.append(np.random.rand(self.layers[-1]))
         bias.append(np.random.rand(1))
 
-        self.layer_num = layer_num
-        self.neurons_in_layers = neurons_in_layers
         self.weights = weights
         self.biases = bias
         self.training_params = training_params
@@ -82,8 +81,8 @@ class Network:
                 # przechowuje listę tablic fe i arg
                 fe_arg = []
                 fe.append(inData)
-                for k in range(self.layer_num):
-                    fe_arg = self.hidden_layer(fe[k], self.neurons_in_layers[k], self.weights[k], self.biases[k])
+                for k in range(self.num_layers):
+                    fe_arg = self.hidden_layer(fe[k], self.layers[k], self.weights[k], self.biases[k])
                     fe.append(fe_arg[0])
                     arg.append(fe_arg[1])
                 output = self.out_layer(fe[-1], self.weights[-1], self.biases[-1])
@@ -91,19 +90,19 @@ class Network:
                 oe = self.out_error(output, self.training_labels[i])
                 sse.append(0.5*(oe**2))
                 result.append(output)
-                delta_w_b = self.delta(arg, self.weights, self.neurons_in_layers, oe, self.layer_num)
-                for k in range(self.layer_num):
+                delta_w_b = self.delta(arg, self.weights, self.layers, oe, self.num_layers)
+                for k in range(self.num_layers):
                     update = self.weight_update_a(self.weights[k], delta_w_b[k], fe[k], arg[k], self.learning_rate, self.biases[k])
                     self.weights[k] = update[0]
                     self.biases[k] = update[1]
-                update = self.layer_weight_update(self.weights[self.layer_num], oe, fe[-1], arg[-1],
+                update = self.layer_weight_update(self.weights[self.num_layers], oe, fe[-1], arg[-1],
                                                   self.learning_rate, self.biases[-2])
-                self.weights[self.layer_num] = update[0]
+                self.weights[self.num_layers] = update[0]
                 self.biases[-2] = update[1]
                 self.biases[-1] += oe
 
             t_data = self.test_net(self.weights, self.test_params, self.test_labels,
-                                   self.neurons_in_layers, self.layer_num, self.biases)
+                                   self.layers, self.num_layers, self.biases)
 
             # ////////////////////////// live plot
             plt.plot(t_data[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
@@ -134,8 +133,8 @@ class Network:
                 break
             print(f'Epoka #{j:02d} sse: {t_data[0]:.10f}, lr: {self.learning_rate:.4f}, pk: {t_data[2]:.2f}%', end='\r')
             self.ep = j
-        test_result = self.test_net(self.weights, self.test_params, self.test_labels, self.neurons_in_layers,
-                                    self.layer_num, self.biases)
+        test_result = self.test_net(self.weights, self.test_params, self.test_labels, self.layers,
+                                    self.num_layers, self.biases)
 
         plt.plot(test_result[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
         plt.plot(self.test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")

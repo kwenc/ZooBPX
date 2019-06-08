@@ -17,8 +17,6 @@ if __name__ == '__main__':
     training_parameters = training_data[0:15]
     training_labels = training_data[16:17][0]
 
-    type(training_parameters)
-
     test_param = testData[0:15]
     test_labels = testData[16:17][0]
 
@@ -26,7 +24,8 @@ if __name__ == '__main__':
     training_parameters = training_parameters.transpose()
     test_param = test_param.transpose()
     epoch_num = 50
-    net = Network(training_parameters, training_labels, 2, [22, 5], epoch_num, learning_rate, test_param,
+
+    net = Network(training_parameters, training_labels, [22, 5], epoch_num, learning_rate, test_param,
                   test_labels)
 
     net.learning()
