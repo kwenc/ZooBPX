@@ -5,18 +5,9 @@ from sigmoid_model import *
 
 
 class Network:
-    '''
-    Główna klasa odpowiadająca za sieć neuronową
-        weights, bias - zwracana tablica przechowujaca wektory wagowe i przesuniecia
-        last_cost - wartosc funkcji kosztu w poprzedniej chwili czasu
-        result - tablica przechowująca wyjścia sieci dla danej epoki
-    '''
-    def __init__(self, training_params, training_labels, layers, epoch_num, learning_rate,
-                 test_params, test_labels, lr_inc=1.05, lr_desc=0.7, er=1.04):
+    def __init__(self, layers, learning_rate, lr_inc=1.05, lr_desc=0.7, er=1.04):
         '''
         Inicializacja wag i biasów Nguyen-Widrow'a
-
-        funkja wzorowana na funkcji z bliblioteki NeuroLab
         https://pythonhosted.org/neurolab/index.html
         :param weights:
         :param biases:
@@ -50,12 +41,7 @@ class Network:
 
         self.weights = weights
         self.biases = bias
-        self.training_params = training_params
-        self.training_labels = training_labels
-        self.epoch_num = epoch_num
         self.learning_rate = learning_rate
-        self.test_params = test_params
-        self.test_labels = test_labels
         self.lr_inc = lr_inc
         self.lr_desc = lr_desc
         self.er = er
@@ -65,15 +51,15 @@ class Network:
         self.ep = 0
         self.goal = 0.0002
 
-    def learning(self):
-        for j in range(self.epoch_num):
+    def gradient_descent(self, training_params, training_labels, test_params, test_labels, epoch):
+        for j in range(epoch):
             result = []
             # przypisanie wag do zmiennej przed wykonaniem się jednej epoki
             o_weights = self.weights
             # przypisanie wag do zmiennej przed wykonaniem się jednej epoki
             o_bias = self.biases
             sse = []
-            for i, inData in enumerate(self.training_params):
+            for i, inData in enumerate(training_params):
                 # tablica przechowująca wektory sygnałów wyjściowych z danych warstw
                 fe = []
                 # tablica przechowująca wektory łącznych pobudzen neuronów z danych warstw
@@ -87,7 +73,7 @@ class Network:
                     arg.append(fe_arg[1])
                 output = self.out_layer(fe[-1], self.weights[-1], self.biases[-1])
                 arg.append(sum(fe[-1] * self.weights[-1]))
-                oe = self.out_error(output, self.training_labels[i])
+                oe = self.out_error(output, training_labels[i])
                 sse.append(0.5*(oe**2))
                 result.append(output)
                 delta_w_b = self.delta(arg, self.weights, self.layers, oe, self.num_layers)
@@ -101,12 +87,12 @@ class Network:
                 self.biases[-2] = update[1]
                 self.biases[-1] += oe
 
-            t_data = self.test_net(self.weights, self.test_params, self.test_labels,
+            t_data = self.test_net(self.weights, test_params, test_labels,
                                    self.layers, self.num_layers, self.biases)
 
             # ////////////////////////// live plot
             plt.plot(t_data[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
-            plt.plot(self.test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")
+            plt.plot(test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")
             plt.legend(loc='upper left')
             plt.ylabel('gatunek')
             plt.xlabel('zwierzeta')
@@ -133,11 +119,11 @@ class Network:
                 break
             print(f'Epoka #{j:02d} sse: {t_data[0]:.10f}, lr: {self.learning_rate:.4f}, pk: {t_data[2]:.2f}%', end='\r')
             self.ep = j
-        test_result = self.test_net(self.weights, self.test_params, self.test_labels, self.layers,
+        test_result = self.test_net(self.weights, test_params, test_labels, self.layers,
                                     self.num_layers, self.biases)
 
         plt.plot(test_result[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
-        plt.plot(self.test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")
+        plt.plot(test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")
         plt.legend(loc='upper left')
         plt.ylabel('gatunek')
         plt.xlabel('zwierzeta')
@@ -191,21 +177,6 @@ class Network:
             weight[i] += learning_rate * oe * 1 * arg[i]
         return [weight, bias]
 
-    def save_model(self, wages, neurons_in_layers, layer_num, path):
-        '''Zapisuje dany model sieci w pliku binarnym'''
-        with open(path, 'wb') as f:
-            pickle.dump(wages, f)
-            pickle.dump(neurons_in_layers, f)
-            pickle.dump(layer_num, f)
-
-    def load_model(self, path):
-        '''Wczytuje dany model sieci'''
-        with open(path, 'rb') as f:
-            weights = pickle.load(f)
-            neurons_in_layers = pickle.load(f)
-            layer_num = pickle.load(f)
-        return [weights, neurons_in_layers, layer_num]
-
     def test_net(self, w, test_params, test_labels, neurons_in_layers, layer_num, bias):
         '''Testuje siec na danych testowych'''
         pk = 0
@@ -252,3 +223,18 @@ class Network:
         # odwrócenie tablicy błędów
         d = d[::-1]
         return d
+
+    def save_model(self, wages, neurons_in_layers, layer_num, path):
+        '''Zapisuje dany model sieci w pliku binarnym'''
+        with open(path, 'wb') as f:
+            pickle.dump(wages, f)
+            pickle.dump(neurons_in_layers, f)
+            pickle.dump(layer_num, f)
+
+    def load_model(self, path):
+        '''Wczytuje dany model sieci'''
+        with open(path, 'rb') as f:
+            weights = pickle.load(f)
+            neurons_in_layers = pickle.load(f)
+            layer_num = pickle.load(f)
+        return [weights, neurons_in_layers, layer_num]
