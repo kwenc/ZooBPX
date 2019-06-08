@@ -5,7 +5,7 @@ from sigmoid_model import *
 
 
 class Network:
-    def __init__(self, layers, learning_rate, lr_inc=1.05, lr_desc=0.7, er=1.04):
+    def __init__(self, layers, learning_rate, alpha, lr_inc=1.05, lr_desc=0.7, er=1.04):
         '''
         Inicializacja wag i biasów Nguyen-Widrow'a
         https://pythonhosted.org/neurolab/index.html
@@ -41,7 +41,6 @@ class Network:
 
         self.weights = weights
         self.biases = bias
-        self.learning_rate = learning_rate
         self.lr_inc = lr_inc
         self.lr_desc = lr_desc
         self.er = er
@@ -50,6 +49,9 @@ class Network:
         self.cost_test = []
         self.ep = 0
         self.goal = 0.0002
+        self.learning_rate = learning_rate
+        # wspolczynnik alpha dla Momentum
+        self.alpha = alpha
 
     def gradient_descent(self, training_params, training_labels, test_params, test_labels, epoch):
         for j in range(epoch):
@@ -95,7 +97,6 @@ class Network:
             sum_sse = sum(sse)
             if sum_sse > self.last_cost * self.er:
                 self.weights = o_weights
-                bias = o_bias
                 if self.learning_rate >= 0.0001:
                     self.learning_rate = self.lr_desc * self.learning_rate
             elif sum_sse < self.last_cost:
