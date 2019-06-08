@@ -1,5 +1,6 @@
 '''TODO:
     --- człon momentum
+    --- wyrkesy 3d
 '''
 ##########################
 # autor: Konrad Wenc
@@ -10,20 +11,11 @@ from network import *
 
 
 if __name__ == '__main__':
-    # jezeli False dane treningowe sa niesortowane
-    training_data, testData = prepare_data(True)
-
-    # podział danych na wejściowe i etykiety
-    training_parameters = training_data[0:15]
-    training_labels = training_data[16:17][0]
-
-    test_params = testData[0:15]
-    test_labels = testData[16:17][0]
+    training_params, training_labels, test_params, test_labels = prepare_data(sort=True)
 
     learning_rate = 0.01
-    training_parameters = training_parameters.transpose()
-    test_params = test_params.transpose()
+    alpha = 0.1
 
-    net = Network([22, 5], learning_rate)
+    net = Network([22, 5], learning_rate, alpha)
 
-    net.gradient_descent(training_parameters, training_labels, test_params, test_labels, epoch=100)
+    net.gradient_descent(training_params, training_labels, test_params, test_labels, epoch=100)

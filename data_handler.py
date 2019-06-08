@@ -52,4 +52,14 @@ def prepare_data(sort):
     test_data = test_data[np.argsort(test_data[:, 16])]
     data = data.transpose()
     test_data = test_data.transpose()
-    return [data, test_data]
+
+    # podział danych na wejściowe i etykiety
+    training_parameters = data[0:15]
+    training_labels = data[16:17][0]
+
+    test_params = test_data[0:15]
+    test_labels = test_data[16:17][0]
+    training_params = training_parameters.transpose()
+    test_params = test_params.transpose()
+
+    return training_params, training_labels, test_params, test_labels
