@@ -90,16 +90,7 @@ class Network:
             t_data = self.test_net(self.weights, test_params, test_labels,
                                    self.layers, self.num_layers, self.biases)
 
-            # ////////////////////////// live plot
-            plt.plot(t_data[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
-            plt.plot(test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")
-            plt.legend(loc='upper left')
-            plt.ylabel('gatunek')
-            plt.xlabel('zwierzeta')
-            plt.draw()
-            plt.pause(1e-17)
-            plt.clf()
-            # /////////////////////////////
+            self.error_plot(t_data, test_labels, live=True)
 
             sum_sse = sum(sse)
             if sum_sse > self.last_cost * self.er:
@@ -122,13 +113,21 @@ class Network:
         test_result = self.test_net(self.weights, test_params, test_labels, self.layers,
                                     self.num_layers, self.biases)
 
-        plt.plot(test_result[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
+        self.error_plot(test_result, test_labels, live=False)
+        return [test_result[2], test_result[0], self.cost_test, self.ep, self.cost, test_result[1]]
+
+    def error_plot(self, test_data, test_labels, live):
+        plt.plot(test_data[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
         plt.plot(test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")
         plt.legend(loc='upper left')
         plt.ylabel('gatunek')
         plt.xlabel('zwierzeta')
-        plt.show()
-        return [test_result[2], test_result[0], self.cost_test, self.ep, self.cost, test_result[1]]
+        if live:
+            plt.draw()
+            plt.pause(1e-17)
+            plt.clf()
+        else:
+            plt.show()
 
     def hidden_layer(self, tab, num_of_neurons, weight, bias):
         """obliczanie łącznego pobudzenia neuronów w warstwie oraz sygnałów wyjściowych z neuronów"""
