@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1e4c0fe9-bbb5-44e9-a257-2c4684c7f602" name="Default Changelist" comment="" />
+    <list default="true" id="1e4c0fe9-bbb5-44e9-a257-2c4684c7f602" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/sigmoid_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network.py" beforeDir="false" afterPath="$PROJECT_DIR$/network.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +34,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data_handler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="40">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="222">
+              <caret line="30" selection-start-line="30" selection-end-line="30" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -39,8 +46,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4080">
-              <caret line="207" column="26" selection-start-line="207" selection-start-column="26" selection-end-line="207" selection-end-column="26" />
+            <state relative-caret-position="2575">
+              <caret line="140" column="70" selection-start-line="140" selection-start-column="70" selection-end-line="140" selection-end-column="70" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -51,8 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+            <state relative-caret-position="20">
+              <caret line="1" column="22" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -72,25 +79,37 @@
       <find>weighted_av</find>
       <find>out_layer</find>
       <find>sigmoid</find>
+      <find>tab</find>
+      <find>Pn</find>
+      <find>training_labels</find>
+      <find>training_parameters</find>
+      <find>delta</find>
+      <find>init_NW</find>
+      <find>last_cost</find>
+      <find>weight_update_a</find>
+      <find>save_model</find>
+      <find>test_net</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="D:/dev/AI_gradientDescent" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/data_handler.py" />
+        <option value="$PROJECT_DIR$/sigmoid_model.py" />
         <option value="$PROJECT_DIR$/network.py" />
         <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="-9" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="325" />
+    <option name="y" value="-15" />
     <option name="width" value="975" />
-    <option name="height" value="1059" />
+    <option name="height" value="1022" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -98,7 +117,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -110,9 +128,11 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -122,11 +142,11 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\konra\Dysk Google\Uczelnia\Sztuczna Inteligencja\ZooBPX\data" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\konra\Dysk Google\Uczelnia\Sztuczna Inteligencja\ZooBPX" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\konra\Dysk Google\Uczelnia\Sztuczna Inteligencja\ZooBPX\data" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -201,22 +221,23 @@
       <workItem from="1559315333419" duration="4265000" />
       <workItem from="1559323697976" duration="5405000" />
       <workItem from="1559924936943" duration="231000" />
-      <workItem from="1559925250271" duration="1497000" />
+      <workItem from="1559925250271" duration="8055000" />
+      <workItem from="1559989386523" duration="5613000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27378000" />
+    <option name="totallyTimeSpent" value="39549000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="848" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="1" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="2" weight="0.18766756" />
+      <window_info content_ui="combo" id="Project" order="2" weight="0.1337953" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32900432" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3279743" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.35476956" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -226,23 +247,23 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.5498392" />
-      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.19107392" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.16720258" />
+      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.3033226" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" sideWeight="0.49430895" weight="0.3197051" />
-      <window_info anchor="right" id="Database" order="4" sideWeight="0.499187" weight="0.3297587" />
-      <window_info anchor="right" x="0" y="0" width="434" height="866" id="Documentation" order="5" sideWeight="0.500813" side_tool="true" weight="0.3297587" />
+      <window_info active="true" anchor="right" id="SciView" order="3" sideWeight="0.49384615" visible="true" weight="0.30916846" />
+      <window_info anchor="right" id="Database" order="4" sideWeight="0.499187" weight="0.32942432" />
+      <window_info anchor="right" x="0" y="0" width="434" height="866" id="Documentation" order="5" sideWeight="0.5061538" side_tool="true" weight="0.33208954" />
     </layout>
     <layout-to-restore>
       <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="1" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.18766756" />
+      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.1337953" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3279743" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.35476956" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -250,21 +271,21 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.55090654" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.40864715" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.16720258" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3033226" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="434" height="866" id="Documentation" order="5" side_tool="true" visible="true" weight="0.20375335" />
+      <window_info anchor="right" id="SciView" order="3" sideWeight="0.49384615" weight="0.30916846" />
+      <window_info anchor="right" id="Database" order="4" sideWeight="0.499187" weight="0.32942432" />
+      <window_info anchor="right" x="0" y="0" width="434" height="866" id="Documentation" order="5" sideWeight="0.5061538" side_tool="true" weight="0.33208954" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ZooBPX$ZooBPX.coverage" NAME="ZooBPX Coverage Results" MODIFIED="1559323431669" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ZooBPX$ZooBPX.coverage" NAME="ZooBPX Coverage Results" MODIFIED="1559989498152" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/ZooBPX-Dokumentacja.gdoc">
@@ -281,9 +302,6 @@
       </provider>
     </entry>
     <entry file="file://D:/dev/AI_gradientDescent/zoo.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/zoo.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://D:/dev/AI_gradientDescent/back_propagation.py">
@@ -303,20 +321,35 @@
     <entry file="file://$PROJECT_DIR$/Histogramy atrybutów.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/zoo.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/zoo.names">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-300" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data_handler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        <state relative-caret-position="222">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sigmoid_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4080">
-          <caret line="207" column="26" selection-start-line="207" selection-start-column="26" selection-end-line="207" selection-end-column="26" />
+        <state relative-caret-position="2575">
+          <caret line="140" column="70" selection-start-line="140" selection-start-column="70" selection-end-line="140" selection-end-column="70" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -325,8 +358,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="20">
+          <caret line="1" column="22" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="22" />
         </state>
       </provider>
     </entry>
