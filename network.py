@@ -5,10 +5,9 @@ from sigmoid_model import *
 
 
 class Network:
-    def __init__(self, layers, learning_rate, alpha, lr_inc=1.05, lr_desc=0.7, er=1.04):
+    def __init__(self, layers, learning_rate, alpha):
         '''
         Inicializacja wag i biasów Nguyen-Widrow'a
-        https://pythonhosted.org/neurolab/index.html
         :param weights:
         :param biases:
         '''
@@ -20,8 +19,7 @@ class Network:
         w_rand = (np.random.rand(self.layers[0], 15) * 2 - 1)
         w_rand = np.sqrt(1. / np.square(w_rand).sum(axis=1).reshape(self.layers[0], 1)) * w_rand
         w = w_fix * w_rand
-        b = np.array([0]) if self.layers[0] == 1 \
-            else w_fix * np.linspace(-1, 1, self.layers[0]) * np.sign(w[:, 0])
+        b = np.array([0]) if self.layers[0] == 1 else w_fix * np.linspace(-1, 1, self.layers[0]) * np.sign(w[:, 0])
 
         weights.append(w)
         bias.append(b)
@@ -35,87 +33,19 @@ class Network:
             weights.append(w)
             bias.append(b)
 
-        # dla ostatniej warstwy
+        # Inicjalizacja wag i biasow dla ostatniej warstwy
         weights.append(np.random.rand(self.layers[-1]))
         bias.append(np.random.rand(1))
 
         self.weights = weights
         self.biases = bias
-        self.lr_inc = lr_inc
-        self.lr_desc = lr_desc
-        self.er = er
         self.last_cost = 0
         self.cost = []
         self.cost_test = []
-        self.ep = 0
         self.goal = 0.0002
         self.learning_rate = learning_rate
         # wspolczynnik alpha dla Momentum
         self.alpha = alpha
-
-    def gradient_descent(self, training_params, training_labels, test_params, test_labels, epoch):
-        for j in range(epoch):
-            result = []
-            # przypisanie wag do zmiennej przed wykonaniem się jednej epoki
-            o_weights = self.weights
-            # przypisanie wag do zmiennej przed wykonaniem się jednej epoki
-            o_bias = self.biases
-            sse = []
-            for i, inData in enumerate(training_params):
-                # tablica przechowująca wektory sygnałów wyjściowych z danych warstw
-                fe = []
-                # tablica przechowująca wektory łącznych pobudzen neuronów z danych warstw
-                arg = []
-                # przechowuje listę tablic fe i arg
-                fe_arg = []
-                fe.append(inData)
-                for k in range(self.num_layers):
-                    fe_arg = self.hidden_layer(fe[k], self.layers[k], self.weights[k], self.biases[k])
-                    fe.append(fe_arg[0])
-                    arg.append(fe_arg[1])
-                output = self.out_layer(fe[-1], self.weights[-1], self.biases[-1])
-                arg.append(sum(fe[-1] * self.weights[-1]))
-                oe = self.out_error(output, training_labels[i])
-                sse.append(0.5*(oe**2))
-                result.append(output)
-                delta_w_b = self.delta(arg, self.weights, self.layers, oe, self.num_layers)
-                for k in range(self.num_layers):
-                    update = self.weight_update_a(self.weights[k], delta_w_b[k], fe[k], arg[k], self.learning_rate, self.biases[k])
-                    self.weights[k] = update[0]
-                    self.biases[k] = update[1]
-                update = self.layer_weight_update(self.weights[self.num_layers], oe, fe[-1], arg[-1],
-                                                  self.learning_rate, self.biases[-2])
-                self.weights[self.num_layers] = update[0]
-                self.biases[-2] = update[1]
-                self.biases[-1] += oe
-
-            t_data = self.test_net(self.weights, test_params, test_labels,
-                                   self.layers, self.num_layers, self.biases)
-
-            self.error_plot(t_data, test_labels, live=True)
-
-            sum_sse = sum(sse)
-            if sum_sse > self.last_cost * self.er:
-                self.weights = o_weights
-                if self.learning_rate >= 0.0001:
-                    self.learning_rate = self.lr_desc * self.learning_rate
-            elif sum_sse < self.last_cost:
-                learning_rate = self.lr_inc * self.learning_rate
-                if learning_rate > 0.99:
-                    self.learning_rate = 0.99
-            self.last_cost = sum_sse
-            self.cost.append(sum_sse)
-            self.cost_test.append(t_data[0])
-            if t_data[0] < self.goal:
-                self.ep = j
-                break
-            print(f'Epoka #{j:02d} sse: {t_data[0]:.10f}, lr: {self.learning_rate:.4f}, pk: {t_data[2]:.2f}%', end='\r')
-            self.ep = j
-        test_result = self.test_net(self.weights, test_params, test_labels, self.layers,
-                                    self.num_layers, self.biases)
-
-        self.error_plot(test_result, test_labels, live=False)
-        return [test_result[2], test_result[0], self.cost_test, self.ep, self.cost, test_result[1]]
 
     def error_plot(self, test_data, test_labels, live):
         plt.plot(test_data[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
