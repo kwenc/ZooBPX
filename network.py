@@ -1,6 +1,4 @@
-import pickle
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import axes3d
 from sigmoid_model import *
 
 
@@ -8,8 +6,6 @@ class Network:
     def __init__(self, layers, learning_rate, alpha):
         '''
         Inicializacja wag i biasów Nguyen-Widrow'a
-        :param weights:
-        :param biases:
         '''
         self.num_layers = len(layers)
         self.layers = layers
@@ -39,13 +35,17 @@ class Network:
 
         self.weights = weights
         self.biases = bias
-        self.last_cost = 0
-        self.cost = []
-        self.cost_test = []
-        self.goal = 0.0002
         self.learning_rate = learning_rate
         # wspolczynnik alpha dla Momentum
         self.alpha = alpha
+        self.lr_inc = 1.05
+        self.lr_dec = 0.7
+        self.er = 1.04
+        self.last_cost = 0
+        self.cost = []
+        self.cost_test = []
+        self.ep = 0
+        self.goal = 0.0002
 
     def error_plot(self, test_data, test_labels, live):
         plt.plot(test_data[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
@@ -107,30 +107,6 @@ class Network:
             weight[i] += learning_rate * oe * 1 * arg[i]
         return [weight, bias]
 
-    def test_net(self, w, test_params, test_labels, neurons_in_layers, layer_num, bias):
-        '''Testuje siec na danych testowych'''
-        pk = 0
-        sse = []
-        test_result = []
-        for i, tab in enumerate(test_params):
-            fe = []
-            arg = []
-            fe.append(tab)
-            for k in range(layer_num):
-                fe_arg = self.hidden_layer(fe[k], neurons_in_layers[k], w[k], bias[k])
-                fe.append(fe_arg[0])
-                arg.append(fe_arg[1])
-            y = self.out_layer(fe[-1], w[-1], bias[-1])
-            test_result.append(y)
-            arg.append(sum(fe[-1] * w[-1]))
-            fe.append(y)
-            oe = self.out_error(y, test_labels[i])
-            if oe ** 2 <= 0.25:
-                pk += 1
-            sse.append((0.5 * (oe ** 2)))
-        pk = pk / (len(test_labels)) * 100
-        return [np.sum(np.array(sse)), test_result, pk]
-
     def delta(self, arg, weights, neurons_in_layers, oe, layer_num):
         """Oblicza delte przy propagacji wstecznej dla wszystkich warstw"""
         # odwrócona tablica wektorów łącznych pobudzen neuronów z danych warstw
@@ -153,18 +129,3 @@ class Network:
         # odwrócenie tablicy błędów
         d = d[::-1]
         return d
-
-    def save_model(self, wages, neurons_in_layers, layer_num, path):
-        '''Zapisuje dany model sieci w pliku binarnym'''
-        with open(path, 'wb') as f:
-            pickle.dump(wages, f)
-            pickle.dump(neurons_in_layers, f)
-            pickle.dump(layer_num, f)
-
-    def load_model(self, path):
-        '''Wczytuje dany model sieci'''
-        with open(path, 'rb') as f:
-            weights = pickle.load(f)
-            neurons_in_layers = pickle.load(f)
-            layer_num = pickle.load(f)
-        return [weights, neurons_in_layers, layer_num]
