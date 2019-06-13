@@ -36,7 +36,6 @@ class Network:
         self.weights = weights
         self.biases = bias
         self.learning_rate = learning_rate
-        # wspolczynnik alpha dla Momentum
         self.momentum = momentum
         self.lr_inc = 1.05
         self.lr_dec = 0.7
@@ -46,19 +45,6 @@ class Network:
         self.cost_test = []
         self.ep = 0
         self.goal = 0.0002
-
-    def error_plot(self, test_data, test_labels, live):
-        plt.plot(test_data[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
-        plt.plot(test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")
-        plt.legend(loc='upper left')
-        plt.ylabel('gatunek')
-        plt.xlabel('zwierzeta')
-        if live:
-            plt.draw()
-            plt.pause(1e-17)
-            plt.clf()
-        else:
-            plt.show()
 
     def hidden_layer(self, tab, num_of_neurons, weight, bias):
         """obliczanie łącznego pobudzenia neuronów w warstwie oraz sygnałów wyjściowych z neuronów"""

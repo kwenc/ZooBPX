@@ -58,7 +58,7 @@ class NetTester:
             t_data = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
                               net.biases)
 
-            net.error_plot(t_data, self.test_labels, live=True)
+            error_plot(t_data, self.test_labels, live=True)
 
             sum_sse = sum(sse)
             if sum_sse > net.last_cost * net.er:
@@ -82,7 +82,7 @@ class NetTester:
         test_result = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
                                net.biases)
 
-        net.error_plot(test_result, self.test_labels, live=False)
+        error_plot(test_result, self.test_labels, live=False)
         return [test_result[2], test_result[0], net.cost_test, net.ep, net.cost, test_result[1]]
 
 
@@ -119,6 +119,20 @@ def test_net(net, w, test_params, test_labels, neurons_in_layers, layer_num, bia
         sse.append((0.5 * (oe ** 2)))
     pk = pk / (len(test_labels)) * 100
     return [np.sum(np.array(sse)), test_result, pk]
+
+
+def error_plot(test_data, test_labels, live):
+    plt.plot(test_data[1], color='#4daf4a', marker='o', label="rozpoznane zwierzeta")
+    plt.plot(test_labels, color='#e55964', marker='o', label="oryginalne zwierzeta")
+    plt.legend(loc='upper left')
+    plt.ylabel('gatunek')
+    plt.xlabel('zwierzeta')
+    if live:
+        plt.draw()
+        plt.pause(1e-17)
+        plt.clf()
+    else:
+        plt.show()
 
 
 def save_model(wages, neurons_in_layers, layer_num, path):
