@@ -3,7 +3,7 @@ from sigmoid_model import *
 
 
 class Network:
-    def __init__(self, layers, learning_rate, alpha):
+    def __init__(self, layers, learning_rate, momentum):
         '''
         Inicializacja wag i biasów Nguyen-Widrow'a
         '''
@@ -37,7 +37,7 @@ class Network:
         self.biases = bias
         self.learning_rate = learning_rate
         # wspolczynnik alpha dla Momentum
-        self.alpha = alpha
+        self.momentum = momentum
         self.lr_inc = 1.05
         self.lr_dec = 0.7
         self.er = 1.04
