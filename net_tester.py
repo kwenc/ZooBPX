@@ -43,14 +43,16 @@ class NetTester:
                 result.append(output)
                 delta_w_b = net.delta(arg, net.weights, net.layers, out_error, net.num_layers)
                 for k in range(net.num_layers):
-                    update = net.weight_update_a(net.weights[k], delta_w_b[k], fe[k], arg[k], net.learning_rate,
-                                                 net.biases[k])
+                    update = net.weight_update_a(net.weights[k], net.previous_weights[k], delta_w_b[k], fe[k], arg[k],
+                                                 net.learning_rate, net.biases[k])
                     net.weights[k] = update[0]
-                    net.biases[k] = update[1]
-                update = net.layer_weight_update(net.weights[net.num_layers], out_error, fe[-1], arg[-1],
-                                                 net.learning_rate, net.biases[-2])
+                    net.previous_weights[k] = update[1]
+                    net.biases[k] = update[2]
+                update = net.layer_weight_update(net.weights[net.num_layers], net.previous_weights[net.num_layers],
+                                                 out_error, fe[-1], arg[-1], net.learning_rate, net.biases[-2])
                 net.weights[net.num_layers] = update[0]
-                net.biases[-2] = update[1]
+                net.previous_weights[net.num_layers] = update[1]
+                net.biases[-2] = update[2]
                 net.biases[-1] += out_error
 
             t_data = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
@@ -60,6 +62,7 @@ class NetTester:
             sum_sse = sum(sse)
             if sum_sse > net.last_cost * net.er:
                 net.weights = o_weights
+                net.previous_weights = o_weights
                 if net.learning_rate >= 0.0001:
                     net.learning_rate = net.lr_dec * net.learning_rate
             elif sum_sse < net.last_cost:
@@ -83,11 +86,11 @@ class NetTester:
         return [test_result[2], test_result[0], net.cost_test, net.ep, net.cost, test_result[1]]
 
 
-def test_net(net, w, test_params, test_labels, neurons_in_layers, layer_num, bias):
+def test_net(net, weight, test_params, test_labels, neurons_in_layers, layer_num, bias):
     '''
     Testuje siec na danych testowych
     :param net:
-    :param w:
+    :param weight:
     :param test_params:
     :param test_labels:
     :param neurons_in_layers:
@@ -103,12 +106,12 @@ def test_net(net, w, test_params, test_labels, neurons_in_layers, layer_num, bia
         arg = []
         fe.append(tab)
         for k in range(layer_num):
-            fe_arg = net.hidden_layer(fe[k], neurons_in_layers[k], w[k], bias[k])
+            fe_arg = net.hidden_layer(fe[k], neurons_in_layers[k], weight[k], bias[k])
             fe.append(fe_arg[0])
             arg.append(fe_arg[1])
-        y = net.out_layer(fe[-1], w[-1], bias[-1])
+        y = net.out_layer(fe[-1], weight[-1], bias[-1])
         test_result.append(y)
-        arg.append(sum(fe[-1] * w[-1]))
+        arg.append(sum(fe[-1] * weight[-1]))
         fe.append(y)
         out_error = test_labels[i] - y
         if out_error ** 2 <= 0.25:
@@ -130,6 +133,7 @@ def error_plot(test_data, test_labels, live):
         plt.clf()
     else:
         plt.show()
+        plt.savefig("nauczona_siec", format='svg')
 
 
 def save_model(wages, neurons_in_layers, layer_num, path):

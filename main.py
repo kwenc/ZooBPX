@@ -1,5 +1,4 @@
 '''TODO:
-    --- człon momentum
     --- wyrkesy 3d
 '''
 from data_handler import *
