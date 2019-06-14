@@ -40,20 +40,20 @@ class NetTester:
 
                 output = net.out_layer(fe[-1], net.weights[-1], net.biases[-1])
                 arg.append(sum(fe[-1] * net.weights[-1]))
-                oe = net.out_error(output, self.training_labels[i])
-                sse.append(0.5 * (oe ** 2))
+                out_error = self.training_labels[i] - output
+                sse.append(0.5 * (out_error ** 2))
                 result.append(output)
-                delta_w_b = net.delta(arg, net.weights, net.layers, oe, net.num_layers)
+                delta_w_b = net.delta(arg, net.weights, net.layers, out_error, net.num_layers)
                 for k in range(net.num_layers):
                     update = net.weight_update_a(net.weights[k], delta_w_b[k], fe[k], arg[k], net.learning_rate,
                                                  net.biases[k])
                     net.weights[k] = update[0]
                     net.biases[k] = update[1]
-                update = net.layer_weight_update(net.weights[net.num_layers], oe, fe[-1], arg[-1],
+                update = net.layer_weight_update(net.weights[net.num_layers], out_error, fe[-1], arg[-1],
                                                  net.learning_rate, net.biases[-2])
                 net.weights[net.num_layers] = update[0]
                 net.biases[-2] = update[1]
-                net.biases[-1] += oe
+                net.biases[-1] += out_error
 
             t_data = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
                               net.biases)
@@ -113,10 +113,10 @@ def test_net(net, w, test_params, test_labels, neurons_in_layers, layer_num, bia
         test_result.append(y)
         arg.append(sum(fe[-1] * w[-1]))
         fe.append(y)
-        oe = net.out_error(y, test_labels[i])
-        if oe ** 2 <= 0.25:
+        out_error = test_labels[i] - y
+        if out_error ** 2 <= 0.25:
             pk += 1
-        sse.append((0.5 * (oe ** 2)))
+        sse.append((0.5 * (out_error ** 2)))
     pk = pk / (len(test_labels)) * 100
     return [np.sum(np.array(sse)), test_result, pk]
 

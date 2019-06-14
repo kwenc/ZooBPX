@@ -62,9 +62,6 @@ class Network:
         x = sum(tab * weight) + bias[0]
         return x
 
-    def out_error(self, out, val):
-        return val - out
-
     def error_l(self, l, weight, fe):
         '''Obliczanie delty dla ostatniej warstwy'''
         err = []
