@@ -3,7 +3,7 @@ from sigmoid_model import *
 
 
 class Network:
-    def __init__(self, layers, learning_rate, momentum):
+    def __init__(self, layers, learning_rate=0.01, momentum=0.1):
         '''
         Inicializacja wag i biasów Nguyen-Widrow'a
         '''
@@ -63,7 +63,7 @@ class Network:
         return x
 
     def error_l(self, l, weight, fe):
-        '''Obliczanie delty dla ostatniej warstwy'''
+        '''Obliczanie różnicy dla ostatniej warstwy'''
         err = []
         for k, val in enumerate(fe):
             err.append(l * weight[k] * bipolar_derivative(val))

@@ -15,9 +15,7 @@ class NetTester:
     def experiment(self):
         for input_layer in range(10, 30):
             for output_layer in range(5, 30):
-                learning_rate = 0.01
-                momentum = 0.1
-                net = network.Network([input_layer, output_layer], learning_rate, momentum)
+                net = network.Network([input_layer, output_layer])
                 self.gradient_descent(net)
 
     def gradient_descent(self, net):
@@ -57,7 +55,6 @@ class NetTester:
 
             t_data = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
                               net.biases)
-
             error_plot(t_data, self.test_labels, live=True)
 
             sum_sse = sum(sse)
