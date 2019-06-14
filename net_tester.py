@@ -1,7 +1,9 @@
-import numpy as np
-import pickle
 import matplotlib.pyplot as plt
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
+
 import network
 
 
@@ -11,16 +13,22 @@ class NetTester:
         self.training_labels = training_labels
         self.test_params = test_params
         self.test_labels = test_labels
+        self.net_pk = np.zeros(1)
 
     def experiment(self):
-        for input_layer in range(10, 30):
-            for output_layer in range(5, 30):
+        for input_layer in range(10, 40):
+            for output_layer in range(10, 40):
                 net = network.Network([input_layer, output_layer])
-                self.gradient_descent(net)
+                self.net_pk = np.append(self.net_pk, self.gradient_descent(net))
+        in_layer = np.arange(10, 50)
+        out_layer = np.arange(10, 50)
+        layers_pk_plot(in_layer, out_layer, self.net_pk)
 
     def gradient_descent(self, net):
         for epoch in range(1, 100):
-            result = []
+            result = list()
+            pk_array = list()
+            pk_array = np.asarray(pk_array)
             # przypisanie wag do zmiennej przed wykonaniem się jednej epoki
             o_weights = net.weights
             sse = []
@@ -57,7 +65,7 @@ class NetTester:
 
             t_data = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
                               net.biases)
-            error_plot(t_data, self.test_labels, live=True)
+            # error_plot(t_data, self.test_labels, live=True)
 
             sum_sse = sum(sse)
             if sum_sse > net.last_cost * net.er:
@@ -81,9 +89,10 @@ class NetTester:
             net.ep = epoch
         test_result = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
                                net.biases)
-
-        error_plot(test_result, self.test_labels, live=False)
-        return [test_result[2], test_result[0], net.cost_test, net.ep, net.cost, test_result[1]]
+        pk_array = np.append(pk_array, test_result[2])
+        # error_plot(test_result, self.test_labels, live=False)
+        # return [pk_array, test_result[0], net.cost_test, net.ep, net.cost, test_result[1]]
+        return pk_array
 
 
 def test_net(net, weight, test_params, test_labels, neurons_in_layers, layer_num, bias):
@@ -133,21 +142,30 @@ def error_plot(test_data, test_labels, live):
         plt.clf()
     else:
         plt.show()
-        plt.savefig("nauczona_siec", format='svg')
 
 
-def save_model(wages, neurons_in_layers, layer_num, path):
-    '''Zapisuje dany model sieci w pliku binarnym'''
-    with open(path, 'wb') as f:
-        pickle.dump(wages, f)
-        pickle.dump(neurons_in_layers, f)
-        pickle.dump(layer_num, f)
+def layers_pk_plot(input_layer, output_layer, pk):
+    '''
+    Creates 3d plot
+    :param input_layer: Array of X axis
+    :param output_layer: Array of Y axis
+    :param pk: Array of Z axis
+    :return: saved plot
+    '''
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
 
+    x, y = np.meshgrid(input_layer, output_layer)
 
-def load_model(path):
-    '''Wczytuje dany model sieci'''
-    with open(path, 'rb') as f:
-        weights = pickle.load(f)
-        neurons_in_layers = pickle.load(f)
-        layer_num = pickle.load(f)
-    return [weights, neurons_in_layers, layer_num]
+    # Plot the surface.
+    surf = ax.plot_surface(x, y, pk, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+
+    # Customize the z axis.
+    ax.set_zlim(-1.01, 1.01)
+    ax.zaxis.set_major_locator(LinearLocator(10))
+    ax.zaxis.set_major_formatter(FormatStrFormatter('%.0f%%'))
+
+    # Add a color bar which maps values to colors.
+    fig.colorbar(surf, shrink=0.5, aspect=5)
+
+    fig.savefig('pk_warstwy_zaleznosc_posort')
