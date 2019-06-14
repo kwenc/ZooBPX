@@ -1,6 +1,3 @@
-'''TODO:
-    --- wyrkesy 3d
-'''
 from data_handler import *
 from net_tester import *
 

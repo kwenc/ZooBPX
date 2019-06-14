@@ -13,22 +13,22 @@ class NetTester:
         self.training_labels = training_labels
         self.test_params = test_params
         self.test_labels = test_labels
-        self.net_pk = np.zeros(1)
+        self.net_pk = np.zeros([1])
 
     def experiment(self):
-        for input_layer in range(10, 40):
-            for output_layer in range(10, 40):
+        in_layer = np.zeros([1])
+        out_layer = np.zeros([1])
+        for input_layer in range(10, 50):
+            for output_layer in range(10, 50):
+                in_layer = np.append(in_layer, input_layer)
+                out_layer = np.append(out_layer, output_layer)
                 net = network.Network([input_layer, output_layer])
                 self.net_pk = np.append(self.net_pk, self.gradient_descent(net))
-        in_layer = np.arange(10, 50)
-        out_layer = np.arange(10, 50)
         layers_pk_plot(in_layer, out_layer, self.net_pk)
 
     def gradient_descent(self, net):
         for epoch in range(1, 100):
             result = list()
-            pk_array = list()
-            pk_array = np.asarray(pk_array)
             # przypisanie wag do zmiennej przed wykonaniem się jednej epoki
             o_weights = net.weights
             sse = []
@@ -66,7 +66,6 @@ class NetTester:
             t_data = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
                               net.biases)
             # error_plot(t_data, self.test_labels, live=True)
-
             sum_sse = sum(sse)
             if sum_sse > net.last_cost * net.er:
                 net.weights = o_weights
@@ -77,7 +76,6 @@ class NetTester:
                 learning_rate = net.lr_inc * net.learning_rate
                 if learning_rate > 0.99:
                     net.learning_rate = 0.99
-
             net.last_cost = sum_sse
             net.cost.append(sum_sse)
             net.cost_test.append(t_data[0])
@@ -89,10 +87,10 @@ class NetTester:
             net.ep = epoch
         test_result = test_net(net, net.weights, self.test_params, self.test_labels, net.layers, net.num_layers,
                                net.biases)
-        pk_array = np.append(pk_array, test_result[2])
         # error_plot(test_result, self.test_labels, live=False)
         # return [pk_array, test_result[0], net.cost_test, net.ep, net.cost, test_result[1]]
-        return pk_array
+        poprawnosc_klasyfikacji = test_result[2]
+        return poprawnosc_klasyfikacji
 
 
 def test_net(net, weight, test_params, test_labels, neurons_in_layers, layer_num, bias):
@@ -155,15 +153,15 @@ def layers_pk_plot(input_layer, output_layer, pk):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
 
-    x, y = np.meshgrid(input_layer, output_layer)
+    #x, y = np.meshgrid(input_layer, output_layer)
 
     # Plot the surface.
-    surf = ax.plot_surface(x, y, pk, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+    surf = ax.plot_trisurf(input_layer, output_layer, pk, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
     # Customize the z axis.
-    ax.set_zlim(-1.01, 1.01)
-    ax.zaxis.set_major_locator(LinearLocator(10))
-    ax.zaxis.set_major_formatter(FormatStrFormatter('%.0f%%'))
+    # ax.set_zlim(-1.01, 1.01)
+    # ax.zaxis.set_major_locator(LinearLocator(10))
+    # ax.zaxis.set_major_formatter(FormatStrFormatter('%.0f%%'))
 
     # Add a color bar which maps values to colors.
     fig.colorbar(surf, shrink=0.5, aspect=5)
