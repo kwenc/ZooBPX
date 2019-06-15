@@ -18,8 +18,8 @@ class NetTester:
     def experiment(self):
         in_layer = np.zeros([1])
         out_layer = np.zeros([1])
-        for input_layer in range(10, 50):
-            for output_layer in range(10, 50):
+        for input_layer in range(10, 40):
+            for output_layer in range(10, 40):
                 in_layer = np.append(in_layer, input_layer)
                 out_layer = np.append(out_layer, output_layer)
                 net = network.Network([input_layer, output_layer])
@@ -153,15 +153,12 @@ def layers_pk_plot(input_layer, output_layer, pk):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
 
-    #x, y = np.meshgrid(input_layer, output_layer)
-
     # Plot the surface.
     surf = ax.plot_trisurf(input_layer, output_layer, pk, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
     # Customize the z axis.
-    # ax.set_zlim(-1.01, 1.01)
-    # ax.zaxis.set_major_locator(LinearLocator(10))
-    # ax.zaxis.set_major_formatter(FormatStrFormatter('%.0f%%'))
+    ax.zaxis.set_major_locator(LinearLocator(10))
+    ax.zaxis.set_major_formatter(FormatStrFormatter('%.0f%%'))
 
     # Add a color bar which maps values to colors.
     fig.colorbar(surf, shrink=0.5, aspect=5)
